@@ -153,7 +153,10 @@ class RouteResource extends Resource
             'index' => Pages\ListRoutes::route('/'),
             'create' => Pages\CreateRoute::route('/create'),
             'view' => Pages\ViewRoute::route('/{record}'),
+            'sort' => Pages\SortRoutes::route('/sort'),
             // 'edit' => Pages\EditRoute::route('/{record}/edit'),
         ];
     }
+
+
 }

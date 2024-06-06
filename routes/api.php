@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 // })->middleware('auth:sanctum');
 
 
-Route::get('/test', [TestController::class, "index"]);
+// Route::get('/test', [TestController::class, "index"]);
 
 Route::apiResource('/routes', RouteController::class);
 Route::apiResource('/paths', PathController::class);
