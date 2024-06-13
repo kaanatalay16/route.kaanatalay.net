@@ -2,6 +2,6 @@
 
 return [
     'python' => [
-        'interpreter' => 'python'
+        'interpreter' => 'python3'
     ]
 ];

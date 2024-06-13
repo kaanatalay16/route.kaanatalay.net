@@ -11,11 +11,14 @@ class RouteService
     {
         // TomTom facadesini kullanarak rota oluşturma
         $route = TomTom::getRoute($startLat, $startLong, $endLat, $endLong);
+        // $route = TomTom::getRoute(41.108824, 29.028869, 41.256647, 28.746119);
 
         // Rotayı parçalara bölelim (20 metre aralıklarla)
+
+
         $segments = $this->segmentRoute($route);
 
-        // Segmentlere hız ve eğim bilgisi ekleyelim
+
         $segmentsWithInfo = $this->addSpeedAndSlopeInfo($segments);
 
         return $segmentsWithInfo;

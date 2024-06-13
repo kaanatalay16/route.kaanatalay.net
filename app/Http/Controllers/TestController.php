@@ -6,12 +6,15 @@ use App\Facades\GoogleMaps;
 use App\Facades\Route;
 use App\Location;
 use App\Models\Path;
+use App\Models\Segment;
 use App\Models\Vehicle;
 use App\TomTom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use App\Services\ElevationService;
+use Illuminate\Support\Facades\Process;
+
 
 
 
@@ -21,9 +24,13 @@ class TestController extends Controller
     public function index()
     {
 
-        $routeSegments = Route::createRoute("40.958031635875", "29.13663819916", "41.105550831013", "29.023104827095");
+        $result = Process::path(Storage::path("python"))->run('python3 main.py ' . Segment::where("new_route_id", 6)->pluck("speed"));
+        if ($result->errorOutput()) {
+            return $result->errorOutput();
+        }
+        return Storage::response("python/distance.png");
 
-        return response()->json($routeSegments);
+
 
 
     }

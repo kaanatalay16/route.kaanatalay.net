@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GeojsonController;
 use App\Http\Controllers\PathController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\TestController;
@@ -12,9 +13,10 @@ use Illuminate\Support\Facades\Route;
 // })->middleware('auth:sanctum');
 
 
-// Route::get('/test', [TestController::class, "index"]);
+Route::get('/test', [TestController::class, "index"]);
 
 Route::apiResource('/routes', RouteController::class);
 Route::apiResource('/paths', PathController::class);
+Route::get('/geojsons/new-route/{id}', [GeojsonController::class, "newRoute"]);
 Route::get('/paths/route/{id}', [PathController::class, "route"]);
 Route::apiResource('/vehicles', VehicleController::class);

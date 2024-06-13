@@ -10,6 +10,7 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets;
+use GeoSot\FilamentEnvEditor\FilamentEnvEditorPlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -27,20 +28,18 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
+            ->databaseNotifications()
             ->path('')
             ->login()
             ->colors([
                 'primary' => Color::Blue,
             ])
+            // ->plugin(
+            //     FilamentEnvEditorPlugin::make()
+            // )
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
-            ->assets([
-                Js::make('example-external-script', 'https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.1/maps/maps-web.min.js'),
-                Js::make('example-external-script', 'https://api.tomtom.com/maps-sdk-for-web/cdn/6.x/6.25.1/services/services-web.min.js'),
-                Js::make('mobile-or-tablet-script', resource_path('js/mobile-or-tablet.js')),
-                Js::make('custom-script', resource_path('js/custom.js')),
 
-            ])
             ->pages([
                 // Pages\Dashboard::class,
             ])

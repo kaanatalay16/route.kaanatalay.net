@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\RouteResource\Pages;
 
+use App\Facades\GoogleMaps;
 use App\Filament\Resources\RouteResource;
 use App\Location;
 use App\Models\Path;
@@ -40,6 +41,9 @@ class CreateRoute extends CreateRecord
                 ->send();
             $this->halt();
         }
+
+
+
         $paths = $response["routes"];
 
         $result = static::getModel()::create($data);
