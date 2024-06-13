@@ -36,7 +36,8 @@ class EditCode extends EditRecord
     {
         return [
 
-            Actions\Action::make('Run Code')
+            Actions\Action::make('run-code-real')
+                ->label("Run Code (Latest Route Segments)")
                 ->action(function () {
 
                     Storage::delete("python/distance.png");
@@ -52,6 +53,52 @@ class EditCode extends EditRecord
                     $command = '/bin/python3 main.py ' . $speeds . " " . $lats . " " . $longs;
                     $result = Process::path(Storage::path("python"))->run($command);
                     // $result = Process::path(Storage::path("python"))->run('/bin/python3 main.py [15,25,45] [41.25051,41.25111,41.25111] [29.54,29.54,29.541]');
+                    // $result = Process::path(Storage::path("python"))->run('/bin/python3 main.py /bin/python3 main.py [51,51,51] [40.95774,40.95781,40.95785] [29.13587,29.13582,29.13577] ');
+
+
+                    if (!Storage::fileExists("python/distance.png")) {
+                        Notification::make()
+                            ->seconds(50)
+                            ->title('Error - main.py')
+                            ->danger()
+                            ->body($command . " " . $result->errorOutput())
+                            ->send();
+
+                        return false;
+                    }
+
+
+                    Notification::make()
+                        ->title('Saved successfully')
+                        ->success()
+                        ->body('Code runned successfully.')
+                        ->sendToDatabase(auth()->user())
+                        ->send();
+
+
+
+
+                    return redirect("output");
+
+
+
+
+
+
+
+                }),
+
+            Actions\Action::make('run-code-test')
+                ->label("Run Code (Default Parameters)")
+                ->color("gray")
+
+                ->action(function () {
+
+                    Storage::delete("python/distance.png");
+
+
+                    $command = '/bin/python3 main.py [15,25,45] [41.25051,41.25111,41.25111] [29.54,29.54,29.541]';
+                    $result = Process::path(Storage::path("python"))->run($command);
                     // $result = Process::path(Storage::path("python"))->run('/bin/python3 main.py /bin/python3 main.py [51,51,51] [40.95774,40.95781,40.95785] [29.13587,29.13582,29.13577] ');
 
 
