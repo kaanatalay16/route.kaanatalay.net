@@ -10,6 +10,16 @@ class Route extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "startingLocation",
+        "endingLocation",
+    ];
+
+
+    protected $appends = [
+        "startingLocation",
+        "endingLocation",
+    ];
 
     public function segments(): HasMany
     {
@@ -17,15 +27,6 @@ class Route extends Model
     }
 
 
-    protected $fillable = [
-        'startingLocation',
-        'endingLocation',
-    ];
-
-    protected $appends = [
-        'startingLocation',
-        'endingLocation',
-    ];
 
 
     public function getStartingLocationAttribute(): array
@@ -56,21 +57,26 @@ class Route extends Model
      * @param ?array $location
      * @return void
      */
-    public function setStartingLocationAttribute(?array $location): void
+    public function setStartingLocationAttribute(?array $startingLocation): void
     {
-        if (is_array($location)) {
-            $this->attributes['startingLatitude'] = $location['lat'];
-            $this->attributes['startingLongitude'] = $location['lng'];
+        if (is_array($startingLocation)) {
+            $this->attributes['startingLatitude'] = $startingLocation['lat'];
+            $this->attributes['startingLongitude'] = $startingLocation['lng'];
             unset($this->attributes['startingLocation']);
         }
     }
 
-    public function setEndingLocationAttribute(?array $location): void
+    public function setEndingLocationAttribute(?array $endingLocation): void
     {
-        if (is_array($location)) {
-            $this->attributes['endingLatitude'] = $location['lat'];
-            $this->attributes['endingLongitude'] = $location['lng'];
+        if (is_array($endingLocation)) {
+            $this->attributes['endingLatitude'] = $endingLocation['lat'];
+            $this->attributes['endingLongitude'] = $endingLocation['lng'];
             unset($this->attributes['endingLocation']);
         }
+    }
+
+    public static function getComputedLocation(): string
+    {
+        return 'location';
     }
 }

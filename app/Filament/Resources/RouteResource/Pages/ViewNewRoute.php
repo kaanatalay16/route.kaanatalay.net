@@ -34,7 +34,7 @@ use Filament\Infolists\Components\View;
 
 
 
-class ViewNewRoute extends ViewRecord
+class ViewRoute extends ViewRecord
 {
     protected static string $resource = RouteResource::class;
 

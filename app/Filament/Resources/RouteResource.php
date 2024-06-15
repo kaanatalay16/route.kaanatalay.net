@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\RouteResource\Pages;
 use App\Filament\Resources\RouteResource\RelationManagers;
-use App\Models\NewRoute;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -99,10 +98,7 @@ class RouteResource extends Resource
                 // Tables\Columns\TextColumn::make('endingLongitude')
                 //     ->numeric()
                 //     ->sortable(),
-                MapColumn::make('location')
-                    ->height('150') // API setting for map height in PX
-                    ->width('250') // API setting got map width in PX
-                ,
+                MapColumn::make('startingLocation'),
                 Tables\Columns\TextColumn::make('segments_count')
                     ->counts("segments")
                     ->numeric()
@@ -137,10 +133,10 @@ class RouteResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListNewRoutes::route('/'),
-            'create' => Pages\CreateNewRoute::route('/create'),
-            'view' => Pages\ViewNewRoute::route('/{record}'),
-            // 'edit' => Pages\EditNewRoute::route('/{record}/edit'),
+            'index' => Pages\ListRoutes::route('/'),
+            'create' => Pages\CreateRoute::route('/create'),
+            'view' => Pages\ViewRoute::route('/{record}'),
+            // 'edit' => Pages\EditRoute::route('/{record}/edit'),
         ];
     }
 }

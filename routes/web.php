@@ -2,9 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/tomtom', function () {
 
 
+
+// whatsapp grubuna link atıldı o yüzden kalmak zorunda
+Route::get('/new-routes/{id}', function ($id) {
+    return redirect("/routes/" . $id);
 });
 
 
