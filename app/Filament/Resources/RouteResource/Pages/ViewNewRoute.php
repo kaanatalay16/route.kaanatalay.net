@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\RouteResource\Pages;
 
 use App\Filament\Resources\RouteResource;
+use Carbon\Carbon;
 use Cheesegrits\FilamentGoogleMaps\Infolists\MapEntry;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
@@ -51,12 +52,15 @@ class ViewRoute extends ViewRecord
                 MapEntry::make('endingLocation')->defaultZoom(13),
 
 
-                MapEntry::make('startingLocation')
-                    ->geoJson(fn($record) => "https://route.kaanatalay.net/api/geojsons/route/" . $record->id)
-                    ->defaultZoom(12)
+                MapEntry::make('path')
+                    ->layers(fn($record) => [
+                        "https://route.kaanatalay.net/api/kml/route/" . $record->id . "/" . Carbon::now()->getTimestampMs(),
+                        // "https://developers.google.com/kml/documentation/KML_Samples.kml"
+                    ])
                     ->height("400px")
-                    ->label("Route")
                     ->columnSpan(2),
+
+
 
 
                 TextEntry::make('created_at')

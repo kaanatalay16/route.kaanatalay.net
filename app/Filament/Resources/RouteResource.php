@@ -98,7 +98,7 @@ class RouteResource extends Resource
                 // Tables\Columns\TextColumn::make('endingLongitude')
                 //     ->numeric()
                 //     ->sortable(),
-                MapColumn::make('startingLocation'),
+                // MapColumn::make('startingLocation'),
                 Tables\Columns\TextColumn::make('segments_count')
                     ->counts("segments")
                     ->numeric()
@@ -107,7 +107,6 @@ class RouteResource extends Resource
                     ->since()
                     ->sortable()
                 ,
-
 
             ])
             ->filters([

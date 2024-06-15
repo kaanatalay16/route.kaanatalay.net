@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\KmlService;
 use App\Services\RouteService;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Model;
@@ -37,6 +38,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton('route', function ($app) {
             return new RouteService();
         });
+
+        $this->app->singleton('kml', function ($app) {
+            return new KmlService();
+        });
+
 
 
     }

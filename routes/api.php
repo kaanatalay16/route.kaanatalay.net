@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GeojsonController;
+use App\Http\Controllers\KmlController;
 use App\Http\Controllers\PathController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\TestController;
@@ -18,5 +19,6 @@ Route::get('/test', [TestController::class, "index"]);
 Route::apiResource('/routes', RouteController::class);
 Route::apiResource('/paths', PathController::class);
 Route::get('/geojsons/route/{id}', [GeojsonController::class, "route"]);
+Route::get('/kml/route/{id}/{time}', [KmlController::class, "route"]);
 Route::get('/paths/route/{id}', [PathController::class, "route"]);
 Route::apiResource('/vehicles', VehicleController::class);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Facades\GoogleMaps;
+use App\Facades\Kml;
 use App\Models\Route;
 use App\Location;
 use App\Models\Path;
@@ -24,13 +25,7 @@ class TestController extends Controller
     public function index()
     {
 
-        // $result = Process::path(Storage::path("python"))->run('python3 main.py ' . Segment::where("route_id", 6)->pluck("speed"));
-        // if ($result->errorOutput()) {
-        //     return $result->errorOutput();
-        // }
-        // return Storage::response("python/distance.png");
 
-        return Route::all()->last();
 
 
 
