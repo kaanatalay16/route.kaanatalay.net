@@ -42,11 +42,10 @@ class EditCode extends EditRecord
 
                     Storage::delete("python/distance.png");
 
-                    $limit = 3;
 
-                    $speeds = Segment::where("new_route_id", 4)->pluck("speed")->slice(0, $limit);
-                    $lats = Segment::where("new_route_id", 4)->pluck("latitude")->slice(0, $limit);
-                    $longs = Segment::where("new_route_id", 4)->pluck("longitude")->slice(0, $limit);
+                    $speeds = Segment::where("new_route_id", 4)->pluck("speed");
+                    $lats = Segment::where("new_route_id", 4)->pluck("latitude");
+                    $longs = Segment::where("new_route_id", 4)->pluck("longitude");
 
 
 

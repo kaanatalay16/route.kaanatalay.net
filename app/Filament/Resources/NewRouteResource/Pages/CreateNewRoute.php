@@ -39,7 +39,7 @@ class CreateNewRoute extends CreateRecord
                 "latitude" => $segment["lat"],
                 "longitude" => $segment["long"],
                 "speed" => $segment["speed"] ?? null,
-                "slope" => $segment["slope"],
+                "slope" => $segment["slope"] ?? null,
             ]);
         }
 
