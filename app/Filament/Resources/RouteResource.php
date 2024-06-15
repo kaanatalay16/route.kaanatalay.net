@@ -4,8 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\RouteResource\Pages;
 use App\Filament\Resources\RouteResource\RelationManagers;
-use App\Models\Route;
-use Cheesegrits\FilamentGoogleMaps\Fields\Map;
+use App\Models\NewRoute;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -13,45 +12,24 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Cheesegrits\FilamentGoogleMaps\Fields\Map;
 use Cheesegrits\FilamentGoogleMaps\Columns\MapColumn;
+
 
 
 class RouteResource extends Resource
 {
-    protected static ?string $model = Route::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-paper-airplane';
-
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('vehicle_id')
-                    ->relationship('vehicle', 'name')
-                    ->columnSpanFull()
-                    ->searchable()
-                    ->preload(),                // Forms\Components\TextInput::make('maxAlternatives')
-                //     ->required()
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('startingLatitude')
-                //     ->required()
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('startingLongitude')
-                //     ->required()
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('endingLatitude')
-                //     ->required()
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('endingLongitude')
-                //     ->required()
-                //     ->numeric(),
-
 
                 Map::make('startingLocation')
                     ->hint("Click Anywhere or Drag the Marker to Change Location")
                     ->defaultLocation([40.95803163587476, 29.136638199160473])
-
                     ->mapControls([
                         'mapTypeControl' => false,
                         'scaleControl' => true,
@@ -102,7 +80,6 @@ class RouteResource extends Resource
                     ->defaultZoom(12) // default zoom level when opening form
                     ->draggable() // allow dragging to move marker
                     ->clickable(true) // allow clicking to move marker
-                ,
             ]);
     }
 
@@ -110,53 +87,60 @@ class RouteResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\ImageColumn::make('vehicle.image')->circular()->label("Photo"),
-                Tables\Columns\TextColumn::make('vehicle.name')->placeholder("Undefined"),
-                // Tables\Columns\TextColumn::make('maxAlternatives')
+                // Tables\Columns\TextColumn::make('startingLatitude')
                 //     ->numeric()
                 //     ->sortable(),
-
+                // Tables\Columns\TextColumn::make('startingLongitude')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('endingLatitude')
+                //     ->numeric()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('endingLongitude')
+                //     ->numeric()
+                //     ->sortable(),
+                MapColumn::make('location')
+                    ->height('150') // API setting for map height in PX
+                    ->width('250') // API setting got map width in PX
+                ,
+                Tables\Columns\TextColumn::make('segments_count')
+                    ->counts("segments")
+                    ->numeric()
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->since()
                     ->sortable()
+                ,
+
 
             ])
             ->filters([
                 //
             ])
             ->actions([
-
-                Tables\Actions\DeleteAction::make(),
                 // Tables\Actions\EditAction::make(),
-                // Tables\Actions\ViewAction::make(),
-
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
-            ])
-        ;
+            ]);
     }
 
     public static function getRelations(): array
     {
         return [
-            RelationManagers\PathsRelationManager::class,
-            // RelationManagers\VehicleRelationManager::class
+            RelationManagers\SegmentsRelationManager::class,
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListRoutes::route('/'),
-            'create' => Pages\CreateRoute::route('/create'),
-            'view' => Pages\ViewRoute::route('/{record}'),
-            'sort' => Pages\SortRoutes::route('/sort'),
-            // 'edit' => Pages\EditRoute::route('/{record}/edit'),
+            'index' => Pages\ListNewRoutes::route('/'),
+            'create' => Pages\CreateNewRoute::route('/create'),
+            'view' => Pages\ViewNewRoute::route('/{record}'),
+            // 'edit' => Pages\EditNewRoute::route('/{record}/edit'),
         ];
     }
-
-
 }

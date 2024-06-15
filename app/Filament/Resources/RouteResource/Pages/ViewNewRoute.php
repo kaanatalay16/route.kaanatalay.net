@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\NewRouteResource\Pages;
+namespace App\Filament\Resources\RouteResource\Pages;
 
-use App\Filament\Resources\NewRouteResource;
+use App\Filament\Resources\RouteResource;
 use Cheesegrits\FilamentGoogleMaps\Infolists\MapEntry;
 use Filament\Actions;
 use Filament\Resources\Pages\ViewRecord;
@@ -36,7 +36,7 @@ use Filament\Infolists\Components\View;
 
 class ViewNewRoute extends ViewRecord
 {
-    protected static string $resource = NewRouteResource::class;
+    protected static string $resource = RouteResource::class;
 
 
 
@@ -52,7 +52,7 @@ class ViewNewRoute extends ViewRecord
 
 
                 MapEntry::make('startingLocation')
-                    ->geoJson(fn($record) => "https://route.kaanatalay.net/api/geojsons/new-route/" . $record->id)
+                    ->geoJson(fn($record) => "https://route.kaanatalay.net/api/geojsons/route/" . $record->id)
                     ->defaultZoom(12)
                     ->height("400px")
                     ->label("Route")

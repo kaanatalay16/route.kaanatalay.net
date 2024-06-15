@@ -4,26 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Route extends Model
 {
     use HasFactory;
 
 
-
-
-    public function vehicle(): BelongsTo
+    public function segments(): HasMany
     {
-        return $this->belongsTo(Vehicle::class);
+        return $this->hasMany(Segment::class);
     }
 
-    public function paths(): HasMany
-    {
-        return $this->hasMany(Path::class);
-    }
 
     protected $fillable = [
         'startingLocation',
@@ -34,7 +26,6 @@ class Route extends Model
         'startingLocation',
         'endingLocation',
     ];
-
 
 
     public function getStartingLocationAttribute(): array
@@ -82,31 +73,4 @@ class Route extends Model
             unset($this->attributes['endingLocation']);
         }
     }
-
-    /**
-     * Get the lat and lng attribute/field names used on this table
-     *
-     * Used by the Filament Google Maps package.
-     *
-     * @return string[]
-     */
-    // public static function getLatLngAttributes(): array
-    // {
-    //     return [
-    //         'lat' => 'startingLatitude',
-    //         'lng' => 'startingLongitude',
-    //     ];
-    // }
-
-    /**
-     * Get the name of the computed location attribute
-     *
-     * Used by the Filament Google Maps package.
-     *
-     * @return string
-     */
-    // public static function getComputedLocation(): string
-    // {
-    //     return 'startingLocation';
-    // }
 }

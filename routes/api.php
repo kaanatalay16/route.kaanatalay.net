@@ -17,6 +17,6 @@ Route::get('/test', [TestController::class, "index"]);
 
 Route::apiResource('/routes', RouteController::class);
 Route::apiResource('/paths', PathController::class);
-Route::get('/geojsons/new-route/{id}', [GeojsonController::class, "newRoute"]);
+Route::get('/geojsons/route/{id}', [GeojsonController::class, "route"]);
 Route::get('/paths/route/{id}', [PathController::class, "route"]);
 Route::apiResource('/vehicles', VehicleController::class);

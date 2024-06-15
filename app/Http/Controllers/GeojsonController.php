@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class GeojsonController extends Controller
 {
-    public function newRoute($id)
+    public function route($id)
     {
         $data = [
             "type" => "FeatureCollection",
@@ -25,7 +25,7 @@ class GeojsonController extends Controller
             ],
 
             "geometry" => [
-                "coordinates" => collect(Segment::where("new_route_id", $id)->get())->map(function ($item) {
+                "coordinates" => collect(Segment::where("route_id", $id)->get())->map(function ($item) {
                     return [$item["longitude"], $item["latitude"]];
                 }),
                 "type" => "LineString"
