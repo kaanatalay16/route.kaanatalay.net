@@ -4,10 +4,29 @@
 import numpy as np
 import pandas as pd
 import math
-import matplotlib.pyplot as plt
 from scipy.integrate import cumtrapz
 from scipy.interpolate import RegularGridInterpolator
 import sys
+import matplotlib.pyplot as plt
+from scipy.interpolate import pchip_interpolate
+
+
+
+def haversine(lat1, lon1, lat2, lon2):
+    # Dünya yarıçapı (km cinsinden)
+    R = 6371
+    # Dereceyi radyana çevirme
+    lat1, lon1, lat2, lon2 = map(np.radians, [lat1, lon1, lat2, lon2])
+    # Farklar
+    dlat = lat2 - lat1
+    dlon = lon2 - lon1
+    # Haversine formülü
+    a = np.sin(dlat/2)**2 + np.cos(lat1) * np.cos(lat2) * np.sin(dlon/2)**2
+    c = 2 * np.arcsin(np.sqrt(a))
+    distance = R * c * 1000  # Sonucu metre cinsinden döndür
+    return distance
+
+
 
 C_r = 0.02 # Şimdilik yuvarlanma katsayısını sabit kabul ettik
 M_passenger = 100 # Yolcu kütlesi (kg)
@@ -17,7 +36,55 @@ M = M_passenger + M_load + M_empty_mass # Toplam kütle (kg)
 G = 9.81 # m/s^2
 
 # sys.argv[1]'den gelen hız verisini kullanarak drive_cycle'ı oluştur
-V = np.array([float(i) for i in sys.argv[1].strip('[]').split(',')]) / 3.6 # m/s
+speed = np.array([float(i) for i in sys.argv[1].strip('[]').split(',')]) / 3.6 # m/s
+lat = np.array([float(i) for i in sys.argv[2].strip('[]').split(',')])
+lng = np.array([float(i) for i in sys.argv[3].strip('[]').split(',')])
+
+# Mesafeleri hesapla ve süreleri bul
+distances = [0]
+x = [0]  # İlk giriş için zaman 0 olarak başlar
+for i in range(1, len(speed)):
+    prev_point = (lat[i-1], lng[i-1])
+    curr_point = (lat[i], lng[i])
+    speed_m_s = speed[i-1]
+    distance = haversine(prev_point[0], prev_point[1], curr_point[0], curr_point[1])
+    distances.append(distance)
+    # Süreyi hesapla: zaman = mesafe / hız (saniye cinsinden)
+    travel_time = distance / speed_m_s
+    x.append(x[-1] + travel_time)  # Toplam süreyi hesapla
+
+seconds = np.arange(0, int(x[-1]))  # Toplam sürenin tam sayı değerine kadar saniyeler
+y = np.interp(seconds, x, speed)
+print(len(y))
+x = seconds
+print(len(seconds))
+time_interval = 10
+edges = np.arange(0, max(x)+ time_interval, time_interval)  # Son aralığı dahil etmek için +time_interval
+which_bin = np.digitize(x,edges)  # histc fonksiyonunun karşılığı
+
+# which_bin'de 0 olan değerleri filtreleyip atıyoruz
+valid_indices = which_bin > 0
+print(len(valid_indices))
+x_filtered = x[valid_indices]
+y_filtered = y[valid_indices]
+which_bin_filtered = which_bin[valid_indices]
+
+# Her aralık için hız değerlerini ortalama alma
+y_avg = np.array([y_filtered[which_bin_filtered == i].mean() for i in range(1, len(edges))])
+
+# Yeni zaman aralıkları
+x_avg = edges[:-1] + np.diff(edges)/2
+x_avg = x_avg[:len(y_avg)]
+
+# Gürültü ekleme
+noise_amplitude = 0.5
+noise = noise_amplitude * np.random.randn(len(y_avg))
+y_noisy = y_avg + noise
+
+# İnterpolasyon
+xq = np.arange(1, max(x) + 1)  # Sorgu için zaman indeksi
+V = pchip_interpolate(x_avg, y_noisy, xq)
+
 
 t = np.arange(len(V)) # saniye
 
@@ -202,6 +269,7 @@ axs[1, 2].set_xlabel('Time (s)')
 axs[1, 2].set_ylabel('Covered Distance (m)')
 axs[1, 2].grid(True)
 axs[1, 2].get_figure().savefig('/home/kaanatalay-route/htdocs/route.kaanatalay.net/storage/app/python/distance.png')
+
 
 plt.tight_layout()
 plt.show()

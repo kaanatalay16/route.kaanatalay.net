@@ -35,7 +35,7 @@ class KmlService
 
         foreach ($data as $index => $place) {
 
-            if ($index === 0) {
+            if ($index === (count($data) - 1)) {
                 continue;
             }
 
@@ -48,12 +48,12 @@ class KmlService
             $kml .= '<color>' . (($index % 2) ? "FF0000CC" : "ff00ff00") . '</color>';
             $kml .= '</LineStyle>';
             $kml .= '</Style>';
-            $kml .= '<name>' . htmlspecialchars("Segment: " . $index) . '</name>';
+            $kml .= '<name>' . htmlspecialchars("Segment: " . $index + 1) . '</name>';
             $kml .= '<description>' . htmlspecialchars("Slope: " . $place["slope"] . " - " . "Speed: " . $place["speed"]) . '</description>';
             $kml .= '<LineString>';
             $kml .= '<coordinates>';
-            $kml .= $data[$index - 1]["longitude"] . "," . $data[$index - 1]["latitude"] . ",0\n";
             $kml .= $data[$index]["longitude"] . "," . $data[$index]["latitude"] . ",0\n";
+            $kml .= $data[$index + 1]["longitude"] . "," . $data[$index + 1]["latitude"] . ",0\n";
             $kml .= '</coordinates>';
             $kml .= '</LineString>';
             $kml .= '</Placemark>';
@@ -69,8 +69,8 @@ class KmlService
             $kml .= '<description>' . htmlspecialchars("Slope: " . $place["slope"] . " - " . "Speed: " . $place["speed"]) . '</description>';
             $kml .= '<LineString>';
             $kml .= '<coordinates>';
-            $kml .= $data[$index - 1]["longitude"] . "," . $data[$index - 1]["latitude"] . ",0\n";
             $kml .= $data[$index]["longitude"] . "," . $data[$index]["latitude"] . ",0\n";
+            $kml .= $data[$index + 1]["longitude"] . "," . $data[$index + 1]["latitude"] . ",0\n";
             $kml .= '</coordinates>';
             $kml .= '</LineString>';
             $kml .= '</Placemark>';

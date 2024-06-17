@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\RouteResource\Pages;
 use App\Filament\Resources\RouteResource\RelationManagers;
+use App\Filament\Resources\RouteResource\Widgets\LineChart;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -136,6 +137,13 @@ class RouteResource extends Resource
             'create' => Pages\CreateRoute::route('/create'),
             'view' => Pages\ViewRoute::route('/{record}'),
             // 'edit' => Pages\EditRoute::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            LineChart::class
         ];
     }
 }

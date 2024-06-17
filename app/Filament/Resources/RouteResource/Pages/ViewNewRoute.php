@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\RouteResource\Pages;
 
 use App\Filament\Resources\RouteResource;
+use App\Filament\Resources\RouteResource\Widgets\DrivingProfile;
 use Carbon\Carbon;
 use Cheesegrits\FilamentGoogleMaps\Infolists\MapEntry;
 use Filament\Actions;
@@ -38,9 +39,59 @@ use Filament\Infolists\Components\View;
 class ViewRoute extends ViewRecord
 {
     protected static string $resource = RouteResource::class;
+    protected static bool $isLazy = false;
 
 
 
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            RouteResource\Widgets\LineChart::make([
+                "title" => "Aging Graph",
+                "label" => "Capacity Retention (%)",
+                "info" => "Shows the decrease in battery capacity over time",
+                "data" => [random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90)],
+                "labelData" => ["a", "b", "c", "d", "e", "f"],
+            ]),
+            RouteResource\Widgets\LineChart::make([
+                "title" => "SoC Graph",
+                "label" => "%",
+                "info" => "Depicts the state of charge (SoC) of the battery decreasing over time.",
+                "data" => [random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90)],
+                "labelData" => ["a", "b", "c", "d", "e", "f"],
+
+            ]),
+            RouteResource\Widgets\LineChart::make([
+                "title" => "Battery Power",
+                "label" => "kw",
+                "info" => "Illustrates the power output of the battery over time.",
+                "data" => [random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90)],
+                "labelData" => ["a", "b", "c", "d", "e", "f"],
+            ]),
+            RouteResource\Widgets\LineChart::make([
+                "title" => "Driving Profile",
+                "label" => "km/h",
+                "info" => "Displays the vehicle's speed variations over time.",
+                "data" => [random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90)],
+                "labelData" => ["a", "b", "c", "d", "e", "f"],
+            ]),
+            RouteResource\Widgets\LineChart::make([
+                "title" => "Total Energy Consumption",
+                "label" => "kWh",
+                "info" => "Represents the cumulative energy consumption over time.",
+                "data" => [random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90)],
+                "labelData" => ["a", "b", "c", "d", "e", "f"],
+            ]),
+            RouteResource\Widgets\LineChart::make([
+                "title" => "Distance",
+                "label" => "Covered Distance (m)",
+                "info" => "Shows the distance covered by the vehicle over time.",
+                "data" => [random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90)],
+                "labelData" => ["a", "b", "c", "d", "e", "f"],
+            ]),
+        ];
+    }
 
     public function infolist(Infolist $infolist): Infolist
     {
@@ -48,8 +99,8 @@ class ViewRoute extends ViewRecord
         return $infolist
             ->schema([
 
-                MapEntry::make('startingLocation')->defaultZoom(13),
-                MapEntry::make('endingLocation')->defaultZoom(13),
+                // MapEntry::make('startingLocation')->defaultZoom(13),
+                // MapEntry::make('endingLocation')->defaultZoom(13),
 
 
                 MapEntry::make('path')
@@ -65,8 +116,13 @@ class ViewRoute extends ViewRecord
 
                 TextEntry::make('created_at')
                     ->dateTime(),
+
+
             ]);
+
+
     }
+
 
 
 }
