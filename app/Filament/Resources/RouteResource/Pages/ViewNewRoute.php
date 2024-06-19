@@ -21,6 +21,8 @@ use Filament\Infolists\Components\Grid;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\HtmlString;
 use Filament\Infolists\Components\ViewEntry;
+use Illuminate\Database\Eloquent\Model;
+
 use Filament\Infolists\Components\Tabs;
 
 use Filament\Infolists\Components\View;
@@ -44,6 +46,8 @@ class ViewRoute extends ViewRecord
 
 
 
+
+
     protected function getFooterWidgets(): array
     {
         return [
@@ -51,44 +55,45 @@ class ViewRoute extends ViewRecord
                 "title" => "Aging Graph",
                 "label" => "Capacity Retention (%)",
                 "info" => "Shows the decrease in battery capacity over time",
-                "data" => [random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90)],
-                "labelData" => ["a", "b", "c", "d", "e", "f"],
-            ]),
+                "data" => $this->record->graph->capacityRetention,
+                "labelData" => $this->record->graph->time,
+            ])
+            ,
             RouteResource\Widgets\LineChart::make([
                 "title" => "SoC Graph",
                 "label" => "%",
                 "info" => "Depicts the state of charge (SoC) of the battery decreasing over time.",
-                "data" => [random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90)],
-                "labelData" => ["a", "b", "c", "d", "e", "f"],
+                "data" => $this->record->graph->soc,
+                "labelData" => $this->record->graph->time,
 
             ]),
             RouteResource\Widgets\LineChart::make([
                 "title" => "Battery Power",
                 "label" => "kw",
                 "info" => "Illustrates the power output of the battery over time.",
-                "data" => [random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90)],
-                "labelData" => ["a", "b", "c", "d", "e", "f"],
+                "data" => $this->record->graph->batteryPower,
+                "labelData" => $this->record->graph->time,
             ]),
             RouteResource\Widgets\LineChart::make([
                 "title" => "Driving Profile",
                 "label" => "km/h",
                 "info" => "Displays the vehicle's speed variations over time.",
-                "data" => [random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90)],
-                "labelData" => ["a", "b", "c", "d", "e", "f"],
+                "data" => $this->record->graph->drivingProfile,
+                "labelData" => $this->record->graph->time,
             ]),
             RouteResource\Widgets\LineChart::make([
                 "title" => "Total Energy Consumption",
                 "label" => "kWh",
                 "info" => "Represents the cumulative energy consumption over time.",
-                "data" => [random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90)],
-                "labelData" => ["a", "b", "c", "d", "e", "f"],
+                "data" => $this->record->graph->totalCellPowerEnergyConsumption,
+                "labelData" => $this->record->graph->time,
             ]),
             RouteResource\Widgets\LineChart::make([
                 "title" => "Distance",
                 "label" => "Covered Distance (m)",
                 "info" => "Shows the distance covered by the vehicle over time.",
-                "data" => [random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90), random_int(0, 90)],
-                "labelData" => ["a", "b", "c", "d", "e", "f"],
+                "data" => $this->record->graph->distance,
+                "labelData" => $this->record->graph->time,
             ]),
         ];
     }

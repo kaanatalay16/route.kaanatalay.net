@@ -14,8 +14,17 @@ class LineChart extends ChartWidget
     public string $info;
 
     protected static ?string $pollingInterval = null;
+    protected int|string|array $columnSpan = 'full';
 
 
+
+    protected static ?array $options = [
+        'plugins' => [
+            'legend' => [
+                'display' => false,
+            ],
+        ],
+    ];
 
     public function getHeading(): ?string
     {
@@ -34,6 +43,9 @@ class LineChart extends ChartWidget
                 [
                     'label' => $this->label,
                     'data' => $this->data,
+                    "tension" => 0,
+                    "pointRadius" => 0,
+                    "borderWidth" => 1
                 ],
             ],
             'labels' => $this->labelData,

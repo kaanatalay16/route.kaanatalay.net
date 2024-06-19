@@ -4,11 +4,17 @@
 import numpy as np
 import pandas as pd
 import math
+import json
 from scipy.integrate import cumtrapz
 from scipy.interpolate import RegularGridInterpolator
 import sys
 import matplotlib.pyplot as plt
 from scipy.interpolate import pchip_interpolate
+from json import JSONEncoder
+
+import warnings
+
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 
 
@@ -25,6 +31,14 @@ def haversine(lat1, lon1, lat2, lon2):
     c = 2 * np.arcsin(np.sqrt(a))
     distance = R * c * 1000  # Sonucu metre cinsinden döndür
     return distance
+
+
+
+class NumpyArrayEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return JSONEncoder.default(self, obj)
 
 
 
@@ -55,16 +69,16 @@ for i in range(1, len(speed)):
 
 seconds = np.arange(0, int(x[-1]))  # Toplam sürenin tam sayı değerine kadar saniyeler
 y = np.interp(seconds, x, speed)
-print(len(y))
+# print(len(y))
 x = seconds
-print(len(seconds))
+# print(len(seconds))
 time_interval = 10
 edges = np.arange(0, max(x)+ time_interval, time_interval)  # Son aralığı dahil etmek için +time_interval
 which_bin = np.digitize(x,edges)  # histc fonksiyonunun karşılığı
 
 # which_bin'de 0 olan değerleri filtreleyip atıyoruz
 valid_indices = which_bin > 0
-print(len(valid_indices))
+# print(len(valid_indices))
 x_filtered = x[valid_indices]
 y_filtered = y[valid_indices]
 which_bin_filtered = which_bin[valid_indices]
@@ -177,7 +191,7 @@ Cell_Current = np.zeros(len(t))
 Battery_Cap = 3.324
 Ro = 0.06  # Internal resistance of the cell (Ohm)
 
-print(f'Total Energy Consumption (kWh): {Total_Cell_Power_Energy_Consumption:.3f}')
+# print(f'Total Energy Consumption (kWh): {Total_Cell_Power_Energy_Consumption:.3f}')
 
 a = 1.226
 b = 0.2797
@@ -273,3 +287,16 @@ axs[1, 2].get_figure().savefig('/home/kaanatalay-route/htdocs/route.kaanatalay.n
 
 plt.tight_layout()
 plt.show()
+
+# Serialization
+numpyData = {
+    "time": t,
+    "distance": distance,
+    "totalCellPowerEnergyConsumption": Total_Cell_Power_Energy_Consumption_Per_Sec,
+    "drivingProfile" : V * 3.6,
+    "batteryPower": Battery_Power,
+    "soc": soc,
+    "capacityRetention": Capacity_retention
+}
+encodedNumpyData = json.dumps(numpyData, cls=NumpyArrayEncoder, indent=4)  # use dump() to write array into file
+print(encodedNumpyData)

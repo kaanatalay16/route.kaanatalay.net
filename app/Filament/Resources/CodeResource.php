@@ -24,6 +24,8 @@ class CodeResource extends Resource
     protected static ?string $model = Code::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-code-bracket-square';
+    protected static ?int $navigationSort = 2;
+
 
     public static function form(Form $form): Form
     {
