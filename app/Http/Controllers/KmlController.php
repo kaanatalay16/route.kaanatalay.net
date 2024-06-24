@@ -13,4 +13,10 @@ class KmlController extends Controller
         return Kml::create(Segment::where("route_id", $id)->get());
 
     }
+
+    public function navigation($id)
+    {
+        return Kml::create(Segment::where("route_id", $id)->get());
+
+    }
 }

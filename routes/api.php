@@ -20,5 +20,6 @@ Route::apiResource('/routes', RouteController::class);
 Route::apiResource('/paths', PathController::class);
 Route::get('/geojsons/route/{id}', [GeojsonController::class, "route"]);
 Route::get('/kml/route/{id}/{time}', [KmlController::class, "route"]);
+Route::get('/kml/navigation/{id}/{time}', [KmlController::class, "navigation"]);
 Route::get('/paths/route/{id}', [PathController::class, "route"]);
 Route::apiResource('/vehicles', VehicleController::class);
