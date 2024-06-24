@@ -36,14 +36,19 @@ class TomTomService
         return json_decode($response->getBody(), true);
     }
 
-    public function getRoute($startLat, $startLong, $endLat, $endLong)
+    public function getRoute($startLat, $startLong, $endLat, $endLong, $route_count = 1)
     {
+        if ($route_count > 6) {
+            $route_count = 6;
+        }
+
         $url = "{$this->routingUrl}/$startLat,$startLong:$endLat,$endLong/json";
         $response = $this->client->get($url, [
             'query' => [
                 'key' => $this->apiKey,
                 'routeType' => 'fastest',
-                'travelMode' => 'car'
+                'travelMode' => 'car',
+                "maxAlternatives" => $route_count - 1
             ]
         ]);
 

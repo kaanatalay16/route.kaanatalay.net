@@ -7,28 +7,37 @@ use App\Facades\TomTom;
 
 class RouteService
 {
-    public function createRoute($startLat, $startLong, $endLat, $endLong)
+
+
+    public function createRoute($startLat, $startLong, $endLat, $endLong, $routeCount)
     {
         // TomTom facadesini kullanarak rota oluşturma
-        $route = TomTom::getRoute($startLat, $startLong, $endLat, $endLong);
+        $result = TomTom::getRoute($startLat, $startLong, $endLat, $endLong, $routeCount);
         // $route = TomTom::getRoute(41.108824, 29.028869, 41.256647, 28.746119);
-
         // Rotayı parçalara bölelim (20 metre aralıklarla)
 
+        $data = [];
+        foreach ($result["routes"] as $route) {
+            $segments = $this->segmentRoute($route);
+            $segmentsWithInfo = $this->addSpeedAndSlopeInfo($segments);
+            array_push($data, $segmentsWithInfo);
+        }
 
-        $segments = $this->segmentRoute($route);
 
-
-        $segmentsWithInfo = $this->addSpeedAndSlopeInfo($segments);
-
-        return $segmentsWithInfo;
+        return $data;
     }
+
+
+
+
+
 
     protected function segmentRoute($route)
     {
         // Rotayı 20 metre parçalara bölecek şekilde segmentlere ayıralım
         $segments = [];
-        $coordinates = $route['routes'][0]['legs'][0]['points'];
+
+        $coordinates = $route['legs'][0]['points'];
 
         foreach ($coordinates as $coordinate) {
             $segments[] = [

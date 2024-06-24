@@ -18,27 +18,16 @@ class ViewNavigation extends ViewRecord
     public function infolist(Infolist $infolist): Infolist
     {
 
-        $kmlDatas = [];
-
-        foreach ($this->record->routes->pluck("id") as $route) {
-            array_push(
-                $kmlDatas,
-                "https://route.kaanatalay.net/api/kml/route/" . $route . "/" . Carbon::now()->getTimestampMs(),
-            );
-        }
-
 
 
         return $infolist
             ->schema([
                 MapEntry::make('path')
-                    ->layers($kmlDatas)
+                    ->layers([
+                        "https://route.kaanatalay.net/api/kml/navigation/" . $this->record->id . "/" . Carbon::now()->getTimestampMs()
+                    ])
                     ->height("400px")
                     ->columnSpan(2),
-
-
-
-
             ]);
     }
 

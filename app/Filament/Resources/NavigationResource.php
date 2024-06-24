@@ -14,6 +14,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\Select;
+
 
 class NavigationResource extends Resource
 {
@@ -64,6 +66,18 @@ class NavigationResource extends Resource
                     ->defaultZoom(12) // default zoom level when opening form
                     ->draggable() // allow dragging to move marker
                     ->clickable(true) // allow clicking to move marker
+                ,
+
+                Select::make('route_count')
+                    ->label("Route Count")
+                    ->options([
+                        '1' => '1',
+                        '2' => '2',
+                        '3' => '3',
+                        '4' => '4',
+                        '5' => '5',
+                        '6' => '6',
+                    ])->columnSpanFull()->default(3)
             ]);
     }
 

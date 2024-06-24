@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Models\Segment;
+
 class KmlService
 {
 
@@ -112,12 +114,22 @@ class KmlService
 
         return $kml;
     }
-    public function navigation($startingLocation, $endingLocation, $routes)
+    public function navigation($routes)
     {
+
+        $startingLocation = [
+            "latitude" => $routes[0]["startingLatitude"],
+            "longitude" => $routes[0]["startingLongitude"],
+        ];
+
+        $endingLocation = [
+            "latitude" => $routes[0]["endingLatitude"],
+            "longitude" => $routes[0]["endingLongitude"],
+        ];
+
         $kml = '<?xml version="1.0" encoding="UTF-8"?>';
         $kml .= '<kml xmlns="http://www.opengis.net/kml/2.2">';
         $kml .= '<Document>';
-
 
         $kml .= '<Placemark>';
         $kml .= '<Style>';
@@ -135,39 +147,31 @@ class KmlService
 
         foreach ($routes as $index => $route) {
 
+
+
             $kml .= '<Placemark>';
             $kml .= '<Style>';
             $kml .= '<LineStyle>';
             $kml .= '<width>2</width>';
-            $kml .= '<color>' . self::$colors[$index] . '</color>';
+            $kml .= '<color>' . self::$colors[random_int(0, count(self::$colors) - 1)] . '</color>';
             $kml .= '</LineStyle>';
             $kml .= '</Style>';
             $kml .= '<name>' . htmlspecialchars("Segment: " . $index + 1) . '</name>';
             $kml .= '<description>' . htmlspecialchars("Slope: " . $route["slope"] . " - " . "Speed: " . $route["speed"]) . '</description>';
             $kml .= '<LineString>';
             $kml .= '<coordinates>';
-            $kml .= $route[$index]["longitude"] . "," . $route[$index]["latitude"] . ",0\n";
-            $kml .= $route[$index + 1]["longitude"] . "," . $route[$index + 1]["latitude"] . ",0\n";
+
+            $segments = Segment::where("route_id", $route->id)->get();
+
+            foreach ($segments as $segment) {
+                $kml .= $segment["longitude"] . "," . $segment["latitude"] . ",0\n";
+                $kml .= $segment["longitude"] . "," . $segment["latitude"] . ",0\n";
+            }
+
             $kml .= '</coordinates>';
             $kml .= '</LineString>';
             $kml .= '</Placemark>';
 
-            $kml .= '<Placemark>';
-            $kml .= '<Style>';
-            $kml .= '<LineStyle>';
-            $kml .= '<width>10</width>';
-            $kml .= '<color>1AFF0000</color>';
-            $kml .= '</LineStyle>';
-            $kml .= '</Style>';
-            $kml .= '<name>' . htmlspecialchars("Segment: " . $index) . '</name>';
-            $kml .= '<description>' . htmlspecialchars("Slope: " . $route["slope"] . " - " . "Speed: " . $route["speed"]) . '</description>';
-            $kml .= '<LineString>';
-            $kml .= '<coordinates>';
-            $kml .= $route[$index]["longitude"] . "," . $route[$index]["latitude"] . ",0\n";
-            $kml .= $route[$index + 1]["longitude"] . "," . $route[$index + 1]["latitude"] . ",0\n";
-            $kml .= '</coordinates>';
-            $kml .= '</LineString>';
-            $kml .= '</Placemark>';
         }
 
 
