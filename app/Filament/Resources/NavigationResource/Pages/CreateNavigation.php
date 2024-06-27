@@ -37,10 +37,11 @@ class CreateNavigation extends CreateRecord
 
         $routeIds = [];
 
-        foreach ($routes as $route) {
+        foreach ($routes as $index => $route) {
 
             $routeRow = RouteModel::create(
                 [
+                    "color" => config("constants.colors")[$index],
                     "navigation_id" => $result->id,
                     "startingLatitude" => $data["startingLocation"]["lat"],
                     "startingLongitude" => $data["startingLocation"]["lng"],
@@ -70,18 +71,18 @@ class CreateNavigation extends CreateRecord
 
         foreach ($routeIds as $routeId) {
 
-            $speeds = Segment::where("route_id", $routeId)->pluck("speed");
-            $lats = Segment::where("route_id", $routeId)->pluck("latitude");
-            $longs = Segment::where("route_id", $routeId)->pluck("longitude");
+            $speeds = Segment::where("route_id", $routeId)->pluck("speed")->splice(0, -1);
+            $lats = Segment::where("route_id", $routeId)->pluck("latitude")->splice(0, -1);
+            $longs = Segment::where("route_id", $routeId)->pluck("longitude")->splice(0, -1);
 
 
 
             $command = '/bin/python3 main.py ' . $speeds . " " . $lats . " " . $longs;
-            $result = Process::path(Storage::path("python"))->run($command);
+            $processResult = Process::path(Storage::path("python"))->run($command);
             // $result = Process::path(Storage::path("python"))->run('/bin/python3 main.py [15,25,45] [41.25051,41.25111,41.25111] [29.54,29.54,29.541]');
             // $result = Process::path(Storage::path("python"))->run('/bin/python3 main.py /bin/python3 main.py [51,51,51] [40.95774,40.95781,40.95785] [29.13587,29.13582,29.13577] ');
 
-            $output = json_decode($result->output());
+            $output = json_decode($processResult->output());
 
 
             Graph::create([

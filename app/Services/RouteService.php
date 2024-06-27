@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Facades\GoogleMaps;
 use App\Facades\TomTom;
+use Illuminate\Support\Facades\Log;
 
 class RouteService
 {
@@ -52,6 +53,8 @@ class RouteService
     protected function addSpeedAndSlopeInfo($segments)
     {
         for ($i = 0; $i < count($segments) - 1; $i++) {
+
+
             $segment = &$segments[$i];
             $nextSegment = $segments[$i + 1];
 
@@ -68,7 +71,12 @@ class RouteService
             $location1 = "{$segment['lat']},{$segment['long']}";
             $location2 = "{$nextSegment['lat']},{$nextSegment['long']}";
             $segment['slope'] = GoogleMaps::slope($location1, $location2);
+
+            Log::channel("test")->info("segment ok. " . $i);
+
         }
+
+
 
         return $segments;
     }

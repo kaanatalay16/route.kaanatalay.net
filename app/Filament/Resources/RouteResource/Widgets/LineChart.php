@@ -10,7 +10,7 @@ class LineChart extends ChartWidget
     public string $title;
     public string $label;
     public array $labelData;
-    public array $data;
+    public array $datasets;
     public string $info;
 
     protected static ?string $pollingInterval = null;
@@ -21,7 +21,7 @@ class LineChart extends ChartWidget
     protected static ?array $options = [
         'plugins' => [
             'legend' => [
-                'display' => false,
+                'display' => true,
             ],
         ],
     ];
@@ -39,15 +39,7 @@ class LineChart extends ChartWidget
     protected function getData(): array
     {
         return [
-            'datasets' => [
-                [
-                    'label' => $this->label,
-                    'data' => $this->data,
-                    "tension" => 0,
-                    "pointRadius" => 0,
-                    "borderWidth" => 1
-                ],
-            ],
+            'datasets' => $this->datasets,
             'labels' => $this->labelData,
         ];
     }
@@ -56,4 +48,5 @@ class LineChart extends ChartWidget
     {
         return 'line';
     }
+
 }

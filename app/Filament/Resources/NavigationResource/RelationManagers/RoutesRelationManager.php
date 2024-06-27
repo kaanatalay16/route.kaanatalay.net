@@ -2,12 +2,18 @@
 
 namespace App\Filament\Resources\NavigationResource\RelationManagers;
 
+use App\Facades\Kml;
+use App\Filament\Resources\RouteResource;
+use App\Filament\Resources\RouteResource\Widgets\LineChart;
+use Filament\Tables\Actions\Action;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
+use Filament\Tables\Columns\ColorColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class RoutesRelationManager extends RelationManager
@@ -29,22 +35,30 @@ class RoutesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('id')
             ->columns([
-                Tables\Columns\TextColumn::make('id'),
+                ColorColumn::make('color'),
+                Tables\Columns\TextColumn::make('segments_count')->counts("segments"),
+
+
+
             ])
             ->filters([
                 //
             ])
             ->headerActions([
                 // Tables\Actions\CreateAction::make(),
-            ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-            ])
+            ])->recordUrl(
+                fn(Model $record): string => RouteResource::getUrl("view", ["record" => $record->id]),
+                true
+            )
+
+
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ])->paginated(false);
     }
+
+
+
 }

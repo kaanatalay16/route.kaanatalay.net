@@ -2,23 +2,12 @@
 
 namespace App\Services;
 
+use App\Helpers\ColorHelper;
 use App\Models\Segment;
 
 class KmlService
 {
 
-    public static $colors = [
-        "ff0000ff", // Red
-        "ff00ff00", // Green
-        "ffff0000", // Blue
-        "ffffff00", // Cyan
-        "ffff00ff", // Magenta
-        "ff00ffff", // Yellow
-        "ff000000", // Black
-        "ff888888", // Gray
-        "ffffffff", // White
-        "ff00aaff"  // Light Blue
-    ];
 
 
     public function create($data)
@@ -152,21 +141,24 @@ class KmlService
             $kml .= '<Placemark>';
             $kml .= '<Style>';
             $kml .= '<LineStyle>';
-            $kml .= '<width>2</width>';
-            $kml .= '<color>' . self::$colors[random_int(0, count(self::$colors) - 1)] . '</color>';
+            $kml .= '<width>3</width>';
+            $kml .= '<color>' . ColorHelper::hexToArgb(config('constants.colors')[$index], "FF") . '</color>';
             $kml .= '</LineStyle>';
             $kml .= '</Style>';
-            $kml .= '<name>' . htmlspecialchars("Segment: " . $index + 1) . '</name>';
-            $kml .= '<description>' . htmlspecialchars("Slope: " . $route["slope"] . " - " . "Speed: " . $route["speed"]) . '</description>';
+            $kml .= '<name>' . htmlspecialchars("Route: " . $index + 1) . '</name>';
             $kml .= '<LineString>';
             $kml .= '<coordinates>';
 
             $segments = Segment::where("route_id", $route->id)->get();
 
+            $kml .= $startingLocation["longitude"] . "," . $startingLocation["latitude"] . ",0\n";
+
             foreach ($segments as $segment) {
                 $kml .= $segment["longitude"] . "," . $segment["latitude"] . ",0\n";
-                $kml .= $segment["longitude"] . "," . $segment["latitude"] . ",0\n";
             }
+
+            $kml .= $endingLocation["longitude"] . "," . $endingLocation["latitude"] . ",0\n";
+
 
             $kml .= '</coordinates>';
             $kml .= '</LineString>';

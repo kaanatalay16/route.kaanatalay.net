@@ -149,4 +149,9 @@ class RouteResource extends Resource
             LineChart::class
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->orderByDesc("id");
+    }
 }

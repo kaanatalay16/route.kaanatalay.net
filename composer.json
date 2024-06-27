@@ -11,6 +11,7 @@
         "dotswan/filament-code-editor": "^1.1",
         "filament/filament": "^3.2",
         "geo-sot/filament-env-editor": "^0.0.4",
+        "guzzlehttp/guzzle": "^7.8",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",

@@ -55,45 +55,95 @@ class ViewRoute extends ViewRecord
                 "title" => "Aging Graph",
                 "label" => "Capacity Retention (%)",
                 "info" => "Shows the decrease in battery capacity over time",
-                "data" => $this->record->graph?->capacityRetention ?? [],
-                "labelData" => $this->record->graph?->time ?? [],
+                "datasets" => [
+                    [
+                        "data" => $this->record->graph?->capacityRetention,
+                        "label" => "Aging Graph",
+                        "tension" => 0,
+                        "pointRadius" => 0,
+                        "borderWidth" => 1.5
+                    ]
+                ],
+                "labelData" => $this->record->graph?->time,
             ])
             ,
             RouteResource\Widgets\LineChart::make([
                 "title" => "SoC Graph",
                 "label" => "%",
                 "info" => "Depicts the state of charge (SoC) of the battery decreasing over time.",
-                "data" => $this->record->graph?->soc ?? [],
-                "labelData" => $this->record->graph?->time ?? [],
+                "datasets" => [
+                    [
+                        "data" => $this->record->graph?->soc,
+                        "label" => "Soc",
+                        "tension" => 0,
+                        "pointRadius" => 0,
+                        "borderWidth" => 1.5
+                    ]
+                ],
+                "labelData" => $this->record->graph?->time,
 
             ]),
             RouteResource\Widgets\LineChart::make([
                 "title" => "Battery Power",
                 "label" => "kw",
                 "info" => "Illustrates the power output of the battery over time.",
-                "data" => $this->record->graph?->batteryPower ?? [],
-                "labelData" => $this->record->graph?->time ?? [],
+                "datasets" => [
+                    [
+                        "data" => $this->record->graph?->batteryPower,
+                        "label" => "Baterry Power",
+                        "tension" => 0,
+                        "pointRadius" => 0,
+                        "borderWidth" => 1.5
+                    ]
+                ],
+                "labelData" => $this->record->graph?->time,
             ]),
             RouteResource\Widgets\LineChart::make([
                 "title" => "Driving Profile",
                 "label" => "km/h",
                 "info" => "Displays the vehicle's speed variations over time.",
-                "data" => $this->record->graph?->drivingProfile ?? [],
-                "labelData" => $this->record->graph?->time ?? [],
+                "datasets" => [
+                    [
+                        "data" => $this->record->graph?->drivingProfile,
+                        "label" => "Driving Profile",
+                        "tension" => 0,
+                        "pointRadius" => 0,
+                        "borderWidth" => 1.5
+                    ]
+                ],
+                "labelData" => $this->record->graph?->time,
             ]),
             RouteResource\Widgets\LineChart::make([
                 "title" => "Total Energy Consumption",
                 "label" => "kWh",
                 "info" => "Represents the cumulative energy consumption over time.",
-                "data" => $this->record->graph?->totalCellPowerEnergyConsumption ?? [],
-                "labelData" => $this->record->graph?->time ?? [],
+                "datasets" => [
+                    [
+                        "data" => $this->record->graph?->totalCellPowerEnergyConsumption,
+                        "label" => "Total Energy Consumption",
+                        "tension" => 0,
+                        "pointRadius" => 0,
+                        "borderWidth" => 1.5
+                    ]
+                ],
+                "labelData" => $this->record->graph?->time,
             ]),
             RouteResource\Widgets\LineChart::make([
                 "title" => "Distance",
                 "label" => "Covered Distance (m)",
                 "info" => "Shows the distance covered by the vehicle over time.",
-                "data" => $this->record->graph?->distance ?? [],
-                "labelData" => $this->record->graph?->time ?? [],
+
+                "datasets" => [
+                    [
+                        "data" => $this->record->graph?->distance,
+                        "label" => "Distance",
+                        "tension" => 0,
+                        "pointRadius" => 0,
+                        "borderWidth" => 1.5
+                    ]
+                ],
+                "labelData" => $this->record->graph?->time,
+
             ]),
         ];
     }

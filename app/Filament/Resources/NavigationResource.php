@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\NavigationResource\Pages;
 use App\Filament\Resources\NavigationResource\RelationManagers;
 use App\Filament\Resources\NavigationResource\RelationManagers\RoutesRelationManager;
+use App\Filament\Resources\RouteResource\Widgets\LineChart;
 use App\Models\Navigation;
 use Cheesegrits\FilamentGoogleMaps\Fields\Map;
 use Filament\Forms;
@@ -132,4 +133,18 @@ class NavigationResource extends Resource
             // 'edit' => Pages\EditNavigation::route('/{record}/edit'),
         ];
     }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->orderByDesc("id");
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            LineChart::class
+        ];
+    }
+
+
 }
